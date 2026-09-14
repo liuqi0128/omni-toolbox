@@ -13,7 +13,8 @@ import { searchTools, toolGroups, visibleTools } from "@/tools/registry";
 import type { ToolEntry } from "@/tools/types";
 
 const TOOL_PREFIX = "/tool/";
-const THEME_CYCLE: ThemeMode[] = ["system", "dark", "light"];
+/** 侧边栏快捷切换只在深色 / 浅色间循环；「跟随系统」请在设置页选择 */
+const THEME_CYCLE: ThemeMode[] = ["dark", "light"];
 const THEME_ICONS: Record<ThemeMode, LucideIcon> = {
   system: Monitor,
   dark: Moon,
@@ -94,7 +95,6 @@ export function Sidebar() {
         {collapsed ? null : (
           <div className="ot-sidebar__title">
             <strong>万象工具箱</strong>
-            <span>{visibleTools.length} 个工具</span>
           </div>
         )}
       </div>
@@ -207,27 +207,33 @@ export function Sidebar() {
         >
           <PanelLeft size={16} />
         </button>
-        <button
-          type="button"
-          className="ot-btn ot-btn--ghost ot-btn--icon"
-          title={THEME_LABELS[themeMode]}
-          aria-label={THEME_LABELS[themeMode]}
-          onClick={() => {
-            const next = THEME_CYCLE[(THEME_CYCLE.indexOf(themeMode) + 1) % THEME_CYCLE.length];
-            setThemeMode(next);
-          }}
-        >
-          <ThemeIcon size={16} />
-        </button>
-        <button
-          type="button"
-          className="ot-btn ot-btn--ghost ot-btn--icon"
-          title="设置"
-          aria-label="设置"
-          onClick={() => void navigate("/settings")}
-        >
-          <Settings size={16} />
-        </button>
+        {/* 折叠态只保留展开按钮，其余入口收起，避免按钮溢出 60px 宽度 */}
+        {collapsed ? null : (
+          <>
+            <button
+              type="button"
+              className="ot-btn ot-btn--ghost ot-btn--icon"
+              title={THEME_LABELS[themeMode]}
+              aria-label={THEME_LABELS[themeMode]}
+              onClick={() => {
+                const next =
+                  THEME_CYCLE[(THEME_CYCLE.indexOf(themeMode) + 1) % THEME_CYCLE.length];
+                setThemeMode(next);
+              }}
+            >
+              <ThemeIcon size={16} />
+            </button>
+            <button
+              type="button"
+              className="ot-btn ot-btn--ghost ot-btn--icon"
+              title="设置"
+              aria-label="设置"
+              onClick={() => void navigate("/settings")}
+            >
+              <Settings size={16} />
+            </button>
+          </>
+        )}
       </div>
     </aside>
   );

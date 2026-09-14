@@ -7,6 +7,28 @@
   display: flex;
   flex-direction: column;
   gap: var(--ot-space-6);
+
+  /* 内容区（.ot-content）不滚动，首页自身需要承担滚动职责 */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-bottom: var(--ot-space-2);
+}
+
+/**
+ * 滚动型 flex 容器的子项禁止收缩。
+ * 否则 overflow 非 visible 的子项（如 .ot-hero）自动最小尺寸为 0，
+ * 会被压扁到只剩内边距，其余内容被裁掉。
+ */
+.ot-home > * {
+  flex-shrink: 0;
+}
+
+/* 首页内的空状态按内容高度展示，不应占满滚动容器 */
+.ot-home .ot-empty {
+  height: auto;
+  min-height: 200px;
 }
 
 .ot-hero {

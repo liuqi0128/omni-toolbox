@@ -55,12 +55,6 @@
   white-space: nowrap;
 }
 
-.ot-sidebar__title span {
-  font-size: var(--ot-text-xs);
-  color: var(--ot-text-muted);
-  white-space: nowrap;
-}
-
 .ot-sidebar__search {
   padding: 0 var(--ot-space-3) var(--ot-space-3);
   flex-shrink: 0;
@@ -83,6 +77,13 @@
   flex-shrink: 0;
 }
 
+/* 折叠态仅剩展开按钮，居中放置 */
+.ot-sidebar--collapsed .ot-sidebar__footer {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .ot-navgroup {
   padding-top: var(--ot-space-3);
 }
@@ -92,7 +93,7 @@
   align-items: center;
   gap: var(--ot-space-2);
   padding: var(--ot-space-1) var(--ot-space-2);
-  font-size: var(--ot-text-xs);
+  font-size: var(--ot-text-sm);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -127,10 +128,10 @@
   gap: var(--ot-space-3);
   width: 100%;
   padding: 0 var(--ot-space-2);
-  height: 32px;
+  height: 34px;
   border-radius: var(--ot-radius-sm);
   color: var(--ot-text-secondary);
-  font-size: var(--ot-text-base);
+  font-size: var(--ot-text-md);
   text-align: left;
   transition:
     background-color var(--ot-duration-fast) var(--ot-ease),
@@ -163,6 +164,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 折叠态下导航项只剩图标，需要水平居中 */
+.ot-sidebar--collapsed .ot-navitem {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .ot-navitem__star {
@@ -248,11 +256,15 @@
   padding: var(--ot-space-5);
 }
 
-/** 需要整页滚动的页面（首页 / 设置 / 关于） */
+/**
+ * 需要整页滚动的页面容器（设置 / 关于）。
+ * 工具页与首页自带滚动，不使用该类。
+ */
 .ot-page-scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 /* ---------------- 通用滚动区 ---------------- */
