@@ -1,0 +1,108 @@
+/**
+ * 浮层：命令面板
+ */
+
+.ot-palette {
+  width: min(620px, calc(100vw - 80px));
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-bg-elevated);
+  border: 1px solid var(--ot-border-strong);
+  box-shadow: var(--ot-shadow-lg);
+  overflow: hidden;
+  animation: ot-palette-in var(--ot-duration) var(--ot-ease);
+}
+
+@keyframes ot-palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ot-palette__head {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  padding: 0 var(--ot-space-4);
+  height: 48px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--ot-border);
+  color: var(--ot-text-muted);
+}
+
+.ot-palette__input {
+  flex: 1;
+  height: 100%;
+  font-size: var(--ot-text-md);
+  color: var(--ot-text-primary);
+  user-select: text;
+}
+
+.ot-palette__input::placeholder {
+  color: var(--ot-text-muted);
+}
+
+.ot-palette__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--ot-space-2);
+}
+
+.ot-palette__group {
+  padding: var(--ot-space-2) var(--ot-space-3) var(--ot-space-1);
+  font-size: var(--ot-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ot-text-muted);
+}
+
+.ot-palette__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  width: 100%;
+  padding: var(--ot-space-2) var(--ot-space-3);
+  border-radius: var(--ot-radius-sm);
+  color: var(--ot-text-secondary);
+  font-size: var(--ot-text-base);
+  text-align: left;
+}
+
+.ot-palette__item--active {
+  background: var(--ot-brand-soft);
+  color: var(--ot-brand);
+}
+
+.ot-palette__item-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ot-palette__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-4);
+  padding: var(--ot-space-2) var(--ot-space-4);
+  border-top: 1px solid var(--ot-border);
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+  flex-shrink: 0;
+}
+
+.ot-palette__footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ot-space-1);
+}

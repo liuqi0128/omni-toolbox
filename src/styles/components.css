@@ -1,0 +1,560 @@
+/**
+ * 组件层：可复用的基础 UI 原子类
+ * 命名约定：.ot-<block>、.ot-<block>--<modifier>
+ */
+
+/* ---------------- 按钮 ---------------- */
+.ot-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ot-space-2);
+  height: var(--ot-control-h);
+  padding: 0 var(--ot-space-3);
+  border-radius: var(--ot-radius-sm);
+  border: 1px solid transparent;
+  font-size: var(--ot-text-base);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--ot-text-primary);
+  transition:
+    background-color var(--ot-duration-fast) var(--ot-ease),
+    border-color var(--ot-duration-fast) var(--ot-ease),
+    color var(--ot-duration-fast) var(--ot-ease),
+    opacity var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-btn:active:not(:disabled) {
+  transform: translateY(0.5px);
+}
+
+.ot-btn:disabled {
+  opacity: 0.45;
+}
+
+.ot-btn--primary {
+  background: var(--ot-brand);
+  color: var(--ot-brand-contrast);
+  border-color: var(--ot-brand);
+}
+
+.ot-btn--primary:hover:not(:disabled) {
+  background: var(--ot-brand-hover);
+  border-color: var(--ot-brand-hover);
+}
+
+.ot-btn--secondary {
+  background: var(--ot-bg-elevated);
+  border-color: var(--ot-border);
+}
+
+.ot-btn--secondary:hover:not(:disabled) {
+  border-color: var(--ot-border-strong);
+  background: var(--ot-bg-hover);
+}
+
+.ot-btn--ghost {
+  background: transparent;
+  color: var(--ot-text-secondary);
+}
+
+.ot-btn--ghost:hover:not(:disabled) {
+  background: var(--ot-bg-hover);
+  color: var(--ot-text-primary);
+}
+
+.ot-btn--danger {
+  background: transparent;
+  color: var(--ot-danger);
+  border-color: transparent;
+}
+
+.ot-btn--danger:hover:not(:disabled) {
+  background: var(--ot-danger-soft);
+}
+
+.ot-btn--sm {
+  height: 26px;
+  padding: 0 var(--ot-space-2);
+  font-size: var(--ot-text-sm);
+}
+
+.ot-btn--icon {
+  width: var(--ot-control-h);
+  padding: 0;
+}
+
+.ot-btn--icon.ot-btn--sm {
+  width: 26px;
+}
+
+.ot-btn--block {
+  width: 100%;
+}
+
+/* ---------------- 表单 ---------------- */
+.ot-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-1);
+  min-width: 0;
+}
+
+.ot-label {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  font-size: var(--ot-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ot-text-muted);
+  text-transform: uppercase;
+}
+
+.ot-hint {
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+}
+
+.ot-input,
+.ot-textarea,
+.ot-select {
+  width: 100%;
+  padding: 0 var(--ot-space-3);
+  height: var(--ot-control-h);
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+  color: var(--ot-text-primary);
+  font-size: var(--ot-text-base);
+  transition:
+    border-color var(--ot-duration-fast) var(--ot-ease),
+    box-shadow var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-textarea {
+  height: auto;
+  min-height: 96px;
+  padding: var(--ot-space-3);
+  resize: vertical;
+  line-height: 1.65;
+}
+
+.ot-input::placeholder,
+.ot-textarea::placeholder {
+  color: var(--ot-text-muted);
+}
+
+.ot-input:focus,
+.ot-textarea:focus,
+.ot-select:focus {
+  outline: none;
+  border-color: var(--ot-brand);
+  box-shadow: 0 0 0 3px var(--ot-brand-ring);
+}
+
+.ot-input:disabled,
+.ot-textarea:disabled,
+.ot-select:disabled {
+  opacity: 0.5;
+}
+
+.ot-input--mono,
+.ot-textarea--mono {
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-sm);
+}
+
+.ot-select {
+  cursor: pointer;
+  appearance: none;
+  padding-right: var(--ot-space-8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888f9e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--ot-space-3) center;
+}
+
+.ot-select option {
+  background: var(--ot-bg-elevated);
+  color: var(--ot-text-primary);
+}
+
+/* 搜索框（带前置图标） */
+.ot-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ot-search__icon {
+  position: absolute;
+  left: var(--ot-space-3);
+  color: var(--ot-text-muted);
+  pointer-events: none;
+}
+
+.ot-search .ot-input {
+  padding-left: 32px;
+}
+
+/* 分段控制器 */
+.ot-segmented {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+}
+
+.ot-segmented__item {
+  padding: 0 var(--ot-space-3);
+  height: 24px;
+  border-radius: var(--ot-radius-xs);
+  font-size: var(--ot-text-sm);
+  color: var(--ot-text-secondary);
+  white-space: nowrap;
+  transition:
+    background-color var(--ot-duration-fast) var(--ot-ease),
+    color var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-segmented__item:hover {
+  color: var(--ot-text-primary);
+}
+
+.ot-segmented__item--active {
+  background: var(--ot-bg-elevated);
+  color: var(--ot-text-primary);
+  box-shadow: var(--ot-shadow-sm);
+  font-weight: 500;
+}
+
+/* 开关 */
+.ot-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  cursor: pointer;
+}
+
+.ot-switch__track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--ot-radius-full);
+  background: var(--ot-border-strong);
+  transition: background-color var(--ot-duration) var(--ot-ease);
+}
+
+.ot-switch__track--on {
+  background: var(--ot-brand);
+}
+
+.ot-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--ot-shadow-sm);
+  transition: transform var(--ot-duration) var(--ot-ease);
+}
+
+.ot-switch__track--on .ot-switch__thumb {
+  transform: translateX(16px);
+}
+
+/* ---------------- 容器 ---------------- */
+.ot-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-4);
+  padding: var(--ot-space-5);
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-bg-surface);
+  border: 1px solid var(--ot-border);
+}
+
+.ot-card--flush {
+  overflow: hidden;
+}
+
+.ot-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-bg-surface);
+  border: 1px solid var(--ot-border);
+  overflow: hidden;
+}
+
+.ot-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  height: 42px;
+  flex-shrink: 0;
+  padding: 0 var(--ot-space-4);
+  border-bottom: 1px solid var(--ot-border);
+  background: var(--ot-bg-surface);
+}
+
+.ot-panel__title {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  font-size: var(--ot-text-sm);
+  font-weight: 600;
+  color: var(--ot-text-secondary);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.ot-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-1);
+  margin-left: auto;
+}
+
+.ot-panel__body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--ot-space-4);
+}
+
+.ot-panel__body--flush {
+  padding: 0;
+}
+
+/* ---------------- 徽标 / 键盘 ---------------- */
+.ot-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ot-space-1);
+  padding: 1px var(--ot-space-2);
+  border-radius: var(--ot-radius-full);
+  font-size: var(--ot-text-xs);
+  font-weight: 500;
+  background: var(--ot-bg-hover);
+  color: var(--ot-text-secondary);
+  white-space: nowrap;
+}
+
+.ot-badge--brand {
+  background: var(--ot-brand-soft);
+  color: var(--ot-brand);
+}
+.ot-badge--success {
+  background: var(--ot-success-soft);
+  color: var(--ot-success);
+}
+.ot-badge--warning {
+  background: var(--ot-warning-soft);
+  color: var(--ot-warning);
+}
+.ot-badge--danger {
+  background: var(--ot-danger-soft);
+  color: var(--ot-danger);
+}
+.ot-badge--info {
+  background: var(--ot-info-soft);
+  color: var(--ot-info);
+}
+
+.ot-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--ot-radius-xs);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-bg-inset);
+  font-size: 10px;
+  color: var(--ot-text-muted);
+  line-height: 1;
+}
+
+/* ---------------- 提示条 ---------------- */
+.ot-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ot-space-2);
+  padding: var(--ot-space-3);
+  border-radius: var(--ot-radius-sm);
+  font-size: var(--ot-text-sm);
+  border: 1px solid transparent;
+}
+
+.ot-alert--error {
+  background: var(--ot-danger-soft);
+  color: var(--ot-danger);
+  border-color: var(--ot-danger);
+}
+
+.ot-alert--warning {
+  background: var(--ot-warning-soft);
+  color: var(--ot-warning);
+  border-color: var(--ot-warning);
+}
+
+.ot-alert--success {
+  background: var(--ot-success-soft);
+  color: var(--ot-success);
+  border-color: var(--ot-success);
+}
+
+.ot-alert--info {
+  background: var(--ot-info-soft);
+  color: var(--ot-info);
+  border-color: var(--ot-info);
+}
+
+.ot-alert svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ---------------- 空状态 ---------------- */
+.ot-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ot-space-3);
+  height: 100%;
+  min-height: 160px;
+  padding: var(--ot-space-8);
+  text-align: center;
+  color: var(--ot-text-muted);
+}
+
+.ot-empty__icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-bg-hover);
+  color: var(--ot-text-muted);
+}
+
+.ot-empty__title {
+  font-size: var(--ot-text-md);
+  font-weight: 600;
+  color: var(--ot-text-secondary);
+}
+
+.ot-empty__desc {
+  font-size: var(--ot-text-sm);
+  max-width: 380px;
+  line-height: 1.7;
+}
+
+/* ---------------- 工具提示 ---------------- */
+.ot-tooltip {
+  position: relative;
+  display: inline-flex;
+}
+
+.ot-tooltip__bubble {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px var(--ot-space-2);
+  border-radius: var(--ot-radius-xs);
+  background: var(--ot-text-primary);
+  color: var(--ot-bg-surface);
+  font-size: var(--ot-text-xs);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ot-duration-fast) var(--ot-ease);
+  z-index: var(--ot-z-overlay);
+}
+
+.ot-tooltip:hover .ot-tooltip__bubble {
+  opacity: 1;
+}
+
+/* ---------------- Toast ---------------- */
+.ot-toasts {
+  position: fixed;
+  right: var(--ot-space-5);
+  bottom: var(--ot-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-2);
+  z-index: var(--ot-z-toast);
+  pointer-events: none;
+}
+
+.ot-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  min-width: 180px;
+  max-width: 340px;
+  padding: var(--ot-space-2) var(--ot-space-3);
+  border-radius: var(--ot-radius-md);
+  background: var(--ot-bg-elevated);
+  border: 1px solid var(--ot-border);
+  box-shadow: var(--ot-shadow-lg);
+  font-size: var(--ot-text-sm);
+  animation: ot-toast-in var(--ot-duration) var(--ot-ease);
+}
+
+.ot-toast--success {
+  color: var(--ot-success);
+}
+.ot-toast--error {
+  color: var(--ot-danger);
+}
+.ot-toast--info {
+  color: var(--ot-text-primary);
+}
+
+@keyframes ot-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---------------- 模态 ---------------- */
+.ot-modal-mask {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: var(--ot-z-modal);
+  animation: ot-fade-in var(--ot-duration-fast) var(--ot-ease);
+}
+
+@keyframes ot-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,145 @@
+/**
+ * 设计令牌（Design Tokens）
+ * 所有颜色 / 间距 / 圆角 / 动效的唯一来源，组件层禁止硬编码数值。
+ */
+
+:root {
+  /* ---------- 字体 ---------- */
+  --ot-font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+  --ot-font-mono:
+    "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  --ot-text-xs: 11px;
+  --ot-text-sm: 12px;
+  --ot-text-base: 13px;
+  --ot-text-md: 14px;
+  --ot-text-lg: 16px;
+  --ot-text-xl: 20px;
+  --ot-text-2xl: 26px;
+
+  /* ---------- 间距 ---------- */
+  --ot-space-0: 0;
+  --ot-space-1: 4px;
+  --ot-space-2: 8px;
+  --ot-space-3: 12px;
+  --ot-space-4: 16px;
+  --ot-space-5: 20px;
+  --ot-space-6: 24px;
+  --ot-space-8: 32px;
+  --ot-space-10: 40px;
+
+  /* ---------- 圆角 ---------- */
+  --ot-radius-xs: 4px;
+  --ot-radius-sm: 6px;
+  --ot-radius-md: 10px;
+  --ot-radius-lg: 14px;
+  --ot-radius-xl: 20px;
+  --ot-radius-full: 999px;
+
+  /* ---------- 尺寸 ---------- */
+  --ot-titlebar-h: 38px;
+  --ot-sidebar-w: 244px;
+  --ot-control-h: 32px;
+
+  /* ---------- 动效 ---------- */
+  --ot-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ot-duration-fast: 120ms;
+  --ot-duration: 180ms;
+  --ot-duration-slow: 280ms;
+  --ot-transition: var(--ot-duration) var(--ot-ease);
+
+  /* ---------- 层级 ---------- */
+  --ot-z-sticky: 10;
+  --ot-z-overlay: 100;
+  --ot-z-modal: 200;
+  --ot-z-toast: 300;
+}
+
+/* ---------- 深色主题（默认） ---------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ot-bg-base: #0d0f14;
+  --ot-bg-surface: #14171e;
+  --ot-bg-elevated: #1a1e27;
+  --ot-bg-inset: #0a0c11;
+  --ot-bg-hover: rgba(255, 255, 255, 0.05);
+  --ot-bg-active: rgba(255, 255, 255, 0.08);
+
+  --ot-border: #252a35;
+  --ot-border-strong: #333a49;
+
+  --ot-text-primary: #e9ecf3;
+  --ot-text-secondary: #9ba4b5;
+  --ot-text-muted: #6a7284;
+  --ot-text-inverse: #12141a;
+
+  --ot-brand: #6d5efc;
+  --ot-brand-hover: #7f72ff;
+  --ot-brand-active: #5b4bf5;
+  --ot-brand-soft: rgba(109, 94, 252, 0.16);
+  --ot-brand-ring: rgba(109, 94, 252, 0.4);
+  --ot-brand-contrast: #ffffff;
+
+  --ot-success: #34d399;
+  --ot-success-soft: rgba(52, 211, 153, 0.14);
+  --ot-warning: #fbbf24;
+  --ot-warning-soft: rgba(251, 191, 36, 0.14);
+  --ot-danger: #f87171;
+  --ot-danger-soft: rgba(248, 113, 113, 0.14);
+  --ot-info: #60a5fa;
+  --ot-info-soft: rgba(96, 165, 250, 0.14);
+
+  --ot-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --ot-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --ot-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.5);
+
+  --ot-scrollbar: rgba(255, 255, 255, 0.14);
+  --ot-scrollbar-hover: rgba(255, 255, 255, 0.24);
+}
+
+/* ---------- 浅色主题 ---------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --ot-bg-base: #f4f5f8;
+  --ot-bg-surface: #ffffff;
+  --ot-bg-elevated: #ffffff;
+  --ot-bg-inset: #f8f9fb;
+  --ot-bg-hover: rgba(15, 20, 35, 0.045);
+  --ot-bg-active: rgba(15, 20, 35, 0.075);
+
+  --ot-border: #e2e5ec;
+  --ot-border-strong: #cdd2dd;
+
+  --ot-text-primary: #16181f;
+  --ot-text-secondary: #5a6273;
+  --ot-text-muted: #8a92a3;
+  --ot-text-inverse: #ffffff;
+
+  --ot-brand: #5b4bf5;
+  --ot-brand-hover: #4d3deb;
+  --ot-brand-active: #4234d6;
+  --ot-brand-soft: rgba(91, 75, 245, 0.1);
+  --ot-brand-ring: rgba(91, 75, 245, 0.3);
+  --ot-brand-contrast: #ffffff;
+
+  --ot-success: #059669;
+  --ot-success-soft: rgba(5, 150, 105, 0.1);
+  --ot-warning: #b45309;
+  --ot-warning-soft: rgba(180, 83, 9, 0.1);
+  --ot-danger: #dc2626;
+  --ot-danger-soft: rgba(220, 38, 38, 0.1);
+  --ot-info: #2563eb;
+  --ot-info-soft: rgba(37, 99, 235, 0.1);
+
+  --ot-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --ot-shadow-md: 0 4px 16px rgba(16, 24, 40, 0.08);
+  --ot-shadow-lg: 0 18px 48px rgba(16, 24, 40, 0.14);
+
+  --ot-scrollbar: rgba(16, 24, 40, 0.18);
+  --ot-scrollbar-hover: rgba(16, 24, 40, 0.3);
+}

@@ -1,0 +1,262 @@
+/**
+ * 布局层：应用外壳 / 侧边栏 / 主区域
+ */
+
+.ot-app {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ot-bg-base);
+}
+
+/* ---------------- 侧边栏 ---------------- */
+.ot-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--ot-sidebar-w);
+  height: 100%;
+  background: var(--ot-bg-surface);
+  border-right: 1px solid var(--ot-border);
+  transition: width var(--ot-duration) var(--ot-ease);
+}
+
+.ot-sidebar--collapsed {
+  width: 60px;
+}
+
+.ot-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  height: 56px;
+  padding: 0 var(--ot-space-3);
+  flex-shrink: 0;
+}
+
+.ot-sidebar__logo {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--ot-radius-sm);
+}
+
+.ot-sidebar__title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.ot-sidebar__title strong {
+  font-size: var(--ot-text-md);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.ot-sidebar__title span {
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+  white-space: nowrap;
+}
+
+.ot-sidebar__search {
+  padding: 0 var(--ot-space-3) var(--ot-space-3);
+  flex-shrink: 0;
+}
+
+.ot-sidebar__nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 var(--ot-space-2) var(--ot-space-3);
+}
+
+.ot-sidebar__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-1);
+  padding: var(--ot-space-2) var(--ot-space-3);
+  border-top: 1px solid var(--ot-border);
+  flex-shrink: 0;
+}
+
+.ot-navgroup {
+  padding-top: var(--ot-space-3);
+}
+
+.ot-navgroup__label {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  padding: var(--ot-space-1) var(--ot-space-2);
+  font-size: var(--ot-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ot-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.ot-navgroup__label:hover {
+  color: var(--ot-text-secondary);
+}
+
+.ot-navgroup__chevron {
+  transform: rotate(90deg);
+  transition: transform var(--ot-duration) var(--ot-ease);
+}
+
+.ot-navgroup__chevron--collapsed {
+  transform: rotate(0deg);
+}
+
+.ot-navgroup__items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.ot-navitem {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  width: 100%;
+  padding: 0 var(--ot-space-2);
+  height: 32px;
+  border-radius: var(--ot-radius-sm);
+  color: var(--ot-text-secondary);
+  font-size: var(--ot-text-base);
+  text-align: left;
+  transition:
+    background-color var(--ot-duration-fast) var(--ot-ease),
+    color var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-navitem:hover {
+  background: var(--ot-bg-hover);
+  color: var(--ot-text-primary);
+}
+
+.ot-navitem--active {
+  background: var(--ot-brand-soft);
+  color: var(--ot-brand);
+  font-weight: 500;
+}
+
+.ot-navitem--active:hover {
+  background: var(--ot-brand-soft);
+  color: var(--ot-brand);
+}
+
+.ot-navitem__icon {
+  flex-shrink: 0;
+}
+
+.ot-navitem__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ot-navitem__star {
+  flex-shrink: 0;
+  color: var(--ot-warning);
+  opacity: 0;
+  transition: opacity var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-navitem:hover .ot-navitem__star,
+.ot-navitem__star--on {
+  opacity: 1;
+}
+
+.ot-sidebar__empty {
+  padding: var(--ot-space-6) var(--ot-space-3);
+  text-align: center;
+  font-size: var(--ot-text-sm);
+  color: var(--ot-text-muted);
+}
+
+/* ---------------- 主区域 ---------------- */
+.ot-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.ot-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-4);
+  height: 56px;
+  flex-shrink: 0;
+  padding: 0 var(--ot-space-6);
+  border-bottom: 1px solid var(--ot-border);
+  background: var(--ot-bg-surface);
+}
+
+.ot-topbar__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.ot-topbar__title {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  font-size: var(--ot-text-md);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ot-topbar__desc {
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ot-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  flex-shrink: 0;
+}
+
+.ot-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: var(--ot-space-5);
+}
+
+/** 需要整页滚动的页面（首页 / 设置 / 关于） */
+.ot-page-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ---------------- 通用滚动区 ---------------- */
+.ot-scroll {
+  overflow-y: auto;
+  min-height: 0;
+}

@@ -1,0 +1,286 @@
+/**
+ * 工具工作区：所有工具页面共享的布局与展示类
+ */
+
+.ot-workspace {
+  display: grid;
+  gap: var(--ot-space-4);
+  height: 100%;
+  min-height: 0;
+}
+
+.ot-workspace--split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ot-workspace--wide-left {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+@media (max-width: 1080px) {
+  .ot-workspace--split,
+  .ot-workspace--wide-left {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+}
+
+/* 纵向堆叠的区块 */
+.ot-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-4);
+  min-width: 0;
+}
+
+.ot-stack--tight {
+  gap: var(--ot-space-2);
+}
+
+.ot-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  flex-wrap: wrap;
+}
+
+.ot-inline--between {
+  justify-content: space-between;
+}
+
+.ot-inline--end {
+  justify-content: flex-end;
+}
+
+.ot-grow {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 代码 / 文本展示区 */
+.ot-code {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: var(--ot-space-3);
+  overflow: auto;
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-sm);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+  tab-size: 2;
+}
+
+.ot-code--nowrap {
+  white-space: pre;
+  word-break: normal;
+}
+
+.ot-code--tall {
+  min-height: 200px;
+}
+
+/* 令牌高亮 */
+.ot-token--key {
+  color: var(--ot-info);
+}
+.ot-token--string {
+  color: var(--ot-success);
+}
+.ot-token--number {
+  color: var(--ot-warning);
+}
+.ot-token--boolean {
+  color: var(--ot-brand);
+}
+.ot-token--null {
+  color: var(--ot-text-muted);
+  font-style: italic;
+}
+.ot-token--punct {
+  color: var(--ot-text-muted);
+}
+
+/* 统计卡片 */
+.ot-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--ot-space-2);
+}
+
+.ot-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--ot-space-3);
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+}
+
+.ot-stat__label {
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ot-stat__value {
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-md);
+  font-weight: 600;
+  color: var(--ot-text-primary);
+  word-break: break-all;
+}
+
+/* 键值对列表 */
+.ot-kv {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+  overflow: hidden;
+}
+
+.ot-kv__row {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  padding: var(--ot-space-2) var(--ot-space-3);
+  font-size: var(--ot-text-sm);
+  border-bottom: 1px solid var(--ot-border);
+}
+
+.ot-kv__row:last-child {
+  border-bottom: none;
+}
+
+.ot-kv__key {
+  flex-shrink: 0;
+  width: 150px;
+  color: var(--ot-text-muted);
+}
+
+.ot-kv__value {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--ot-font-mono);
+  color: var(--ot-text-primary);
+  word-break: break-all;
+  user-select: text;
+}
+
+/* 结果列表（用于批量生成类工具） */
+.ot-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-1);
+}
+
+.ot-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-2);
+  padding: var(--ot-space-2) var(--ot-space-3);
+  border-radius: var(--ot-radius-sm);
+  background: var(--ot-bg-inset);
+  border: 1px solid var(--ot-border);
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-sm);
+  transition: border-color var(--ot-duration-fast) var(--ot-ease);
+}
+
+.ot-list__item:hover {
+  border-color: var(--ot-border-strong);
+}
+
+.ot-list__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: text;
+}
+
+/* 带索引的序号 */
+.ot-list__index {
+  flex-shrink: 0;
+  width: 22px;
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+  text-align: right;
+}
+
+/* 选项行 */
+.ot-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-3);
+}
+
+.ot-option {
+  display: flex;
+  align-items: center;
+  gap: var(--ot-space-3);
+  min-height: 26px;
+}
+
+.ot-option__label {
+  flex-shrink: 0;
+  width: 96px;
+  font-size: var(--ot-text-sm);
+  color: var(--ot-text-secondary);
+}
+
+.ot-option__control {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 色板 */
+.ot-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: var(--ot-space-2);
+}
+
+.ot-swatch {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--ot-radius-sm);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-bg-inset);
+}
+
+.ot-swatch__color {
+  height: 52px;
+}
+
+.ot-swatch__meta {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ot-space-2);
+  gap: 2px;
+}
+
+.ot-swatch__name {
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-xs);
+  font-weight: 600;
+  color: var(--ot-text-primary);
+}
+
+.ot-swatch__value {
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-xs);
+  color: var(--ot-text-muted);
+}
