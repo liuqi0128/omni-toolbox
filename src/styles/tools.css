@@ -17,11 +17,14 @@
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
 }
 
+/* 窄窗口下退化为单列：由工作区自身承担滚动，避免内容被内容区裁掉 */
 @media (max-width: 1080px) {
   .ot-workspace--split,
   .ot-workspace--wide-left {
     grid-template-columns: minmax(0, 1fr);
-    height: auto;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
   }
 }
 
@@ -283,4 +286,119 @@
   font-family: var(--ot-font-mono);
   font-size: var(--ot-text-xs);
   color: var(--ot-text-muted);
+}
+
+/* ---------------- 文件对比 ---------------- */
+.ot-diff-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-4);
+  height: 100%;
+  min-height: 0;
+}
+
+/* 两侧文件输入区 */
+.ot-diff-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ot-space-4);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1080px) {
+  .ot-diff-inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ot-diff-drop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ot-space-2);
+  flex: 1;
+  min-height: 0;
+}
+
+/* 拖拽经过时的提示态 */
+.ot-diff-drop--active {
+  outline: 2px dashed var(--ot-brand);
+  outline-offset: -6px;
+  border-radius: var(--ot-radius-sm);
+}
+
+/* 差异行：左右并排 */
+.ot-diff-rows {
+  display: flex;
+  flex-direction: column;
+  padding: var(--ot-space-2) 0;
+}
+
+.ot-diff-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ot-diff-cell {
+  display: flex;
+  gap: var(--ot-space-2);
+  min-width: 0;
+  padding: 0 var(--ot-space-3);
+  font-family: var(--ot-font-mono);
+  font-size: var(--ot-text-sm);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* 两栏之间的分隔线 */
+.ot-diff-cell + .ot-diff-cell {
+  border-left: 1px solid var(--ot-border-strong);
+}
+
+.ot-diff-cell--remove {
+  background: var(--ot-danger-soft);
+}
+
+.ot-diff-cell--add {
+  background: var(--ot-success-soft);
+}
+
+/* 该侧没有对应行时的占位 */
+.ot-diff-cell--empty {
+  background: var(--ot-bg-hover);
+}
+
+.ot-diff-no {
+  flex-shrink: 0;
+  width: 38px;
+  text-align: right;
+  color: var(--ot-text-muted);
+  user-select: none;
+}
+
+.ot-diff-text {
+  flex: 1;
+  min-width: 0;
+  user-select: text;
+}
+
+/* 结果面板占满剩余高度 */
+.ot-diff-result {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 对比选项工具条 */
+.ot-diff-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ot-space-3) var(--ot-space-5);
+  padding: 0 var(--ot-space-1);
+  flex-shrink: 0;
+}
+
+/* 结果面板内的提示 / 空状态留白 */
+.ot-diff-message {
+  padding: var(--ot-space-4);
 }
