@@ -5,6 +5,7 @@
 //! 2. 在 `crate::run()` 的 `generate_handler!` 中登记；
 //! 3. 前端通过 `@/lib/ipc` 的 `call()` 调用。
 
+pub mod bluetooth;
 pub mod crypto;
 pub mod generator;
 pub mod serial;

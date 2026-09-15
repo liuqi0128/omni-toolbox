@@ -159,7 +159,7 @@ pub fn open_serial(
 
     close_port(&state)?;
 
-    let mut port = serialport::new(&config.port, config.baud_rate)
+    let port = serialport::new(&config.port, config.baud_rate)
         .data_bits(parse_data_bits(config.data_bits)?)
         .stop_bits(parse_stop_bits(config.stop_bits)?)
         .parity(parse_parity(config.parity.as_deref())?)

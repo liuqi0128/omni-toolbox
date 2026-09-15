@@ -12,6 +12,7 @@ mod state;
 pub use error::{AppError, AppResult};
 pub use state::AppState;
 
+use commands::bluetooth::BluetoothState;
 use commands::serial::SerialState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -20,7 +21,12 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .manage(AppState::new())
         .manage(SerialState::new())
+        .manage(BluetoothState::new())
         .invoke_handler(tauri::generate_handler![
+            commands::bluetooth::bluetooth_scanning,
+            commands::bluetooth::list_bluetooth_adapters,
+            commands::bluetooth::start_bluetooth_scan,
+            commands::bluetooth::stop_bluetooth_scan,
             commands::crypto::hash_text,
             commands::generator::generate_uuids,
             commands::serial::close_serial,
