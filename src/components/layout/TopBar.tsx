@@ -2,8 +2,10 @@ import { Command, Star } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 
-import { useFavoritesStore } from "@/features/favorites/store";
+import { Button, Kbd } from "@/components/ui";
 import { usePaletteStore } from "@/features/command-palette/store";
+import { useFavoritesStore } from "@/features/favorites/store";
+import { cn } from "@/lib/cn";
 import { getTool } from "@/tools/registry";
 
 const TOOL_PREFIX = "/tool/";
@@ -46,39 +48,37 @@ export function TopBar() {
   const Icon = info?.icon;
 
   return (
-    <header className="ot-topbar">
-      <div className="ot-topbar__info">
-        <div className="ot-topbar__title">
+    <header className="flex h-14 shrink-0 items-center gap-4 border-b border-line bg-surface px-6">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-center gap-2 truncate text-md leading-tight font-semibold">
           {Icon ? <Icon size={16} aria-hidden /> : null}
           {info?.title ?? "万象工具箱"}
         </div>
-        <div className="ot-topbar__desc">{info?.description ?? ""}</div>
+        <div className="truncate text-xs leading-snug text-fg-muted">{info?.description ?? ""}</div>
       </div>
 
-      <div className="ot-topbar__actions">
+      <div className="flex shrink-0 items-center gap-2">
         {toolId ? (
           <button
             type="button"
-            className="ot-btn ot-btn--ghost ot-btn--icon"
-            style={starred ? { color: "var(--ot-warning)" } : undefined}
             title={starred ? "取消收藏" : "收藏该工具"}
             aria-label={starred ? "取消收藏" : "收藏该工具"}
+            className={cn(
+              "inline-flex size-8 items-center justify-center rounded-sm transition-colors",
+              starred ? "text-warning hover:bg-hover" : "text-fg-soft hover:bg-hover hover:text-fg",
+            )}
             onClick={() => toggleFavorite(toolId)}
           >
             <Star size={16} fill={starred ? "currentColor" : "none"} />
           </button>
         ) : null}
 
-        <button
-          type="button"
-          className="ot-btn ot-btn--secondary ot-btn--sm"
-          onClick={() => setPaletteOpen(true)}
-        >
+        <Button variant="secondary" size="sm" onClick={() => setPaletteOpen(true)}>
           <Command size={14} />
           快速跳转
-          <span className="ot-kbd">Ctrl</span>
-          <span className="ot-kbd">K</span>
-        </button>
+          <Kbd>Ctrl</Kbd>
+          <Kbd>K</Kbd>
+        </Button>
       </div>
     </header>
   );

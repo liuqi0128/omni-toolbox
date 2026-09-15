@@ -19,4 +19,6 @@ export type { AlertProps, BadgeProps, EmptyStateProps, FeedbackVariant } from ".
 export { CopyButton } from "./CopyButton";
 export type { CopyButtonProps } from "./CopyButton";
 
+export { Kbd } from "./Kbd";
+
 export { Toaster } from "./Toaster";

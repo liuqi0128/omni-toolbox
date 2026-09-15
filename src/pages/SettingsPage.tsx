@@ -3,6 +3,7 @@ import { ClipboardClock, RotateCcw, Settings2, Star } from "lucide-react";
 import {
   Alert,
   Button,
+  Kbd,
   Panel as PanelBox,
   PanelBody,
   PanelHead,
@@ -30,29 +31,31 @@ export function SettingsPage() {
   const clearHistory = useHistoryStore((state) => state.clear);
 
   return (
-    <div className="ot-page-scroll">
-      <div className="ot-doc">
+    <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+      <div className="flex max-w-[760px] flex-col gap-4">
         <PanelBox>
           <PanelHead title="外观" icon={<Settings2 size={14} />} />
           <PanelBody>
-            <div className="ot-settingrow">
-              <div className="ot-settingrow__info">
-                <div className="ot-settingrow__title">主题模式</div>
-                <div className="ot-settingrow__desc">
+            <div className="flex items-center gap-4 border-b border-line py-3 first:pt-0">
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-medium">主题模式</div>
+                <div className="text-sm leading-normal text-fg-muted">
                   跟随系统时会随操作系统的深浅色设置自动切换。
                 </div>
               </div>
-              <div className="ot-settingrow__control">
+              <div className="shrink-0">
                 <Segmented value={themeMode} options={THEME_OPTIONS} onValueChange={setThemeMode} />
               </div>
             </div>
 
-            <div className="ot-settingrow">
-              <div className="ot-settingrow__info">
-                <div className="ot-settingrow__title">默认折叠侧边栏</div>
-                <div className="ot-settingrow__desc">折叠后仅保留图标，为内容区腾出更多空间。</div>
+            <div className="flex items-center gap-4 py-3 last:pb-0">
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-medium">默认折叠侧边栏</div>
+                <div className="text-sm leading-normal text-fg-muted">
+                  折叠后仅保留图标，为内容区腾出更多空间。
+                </div>
               </div>
-              <div className="ot-settingrow__control">
+              <div className="shrink-0">
                 <Switch checked={sidebarCollapsed} onCheckedChange={toggleSidebar} />
               </div>
             </div>
@@ -62,16 +65,17 @@ export function SettingsPage() {
         <PanelBox>
           <PanelHead title="数据" icon={<ClipboardClock size={14} />} />
           <PanelBody>
-            <div className="ot-settingrow">
-              <div className="ot-settingrow__info">
-                <div className="ot-settingrow__title">
-                  <Star size={13} /> 收藏的工具
+            <div className="flex items-center gap-4 border-b border-line py-3 first:pt-0">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1 text-base font-medium">
+                  <Star size={13} />
+                  收藏的工具
                 </div>
-                <div className="ot-settingrow__desc">
+                <div className="text-sm leading-normal text-fg-muted">
                   当前共 {favoriteIds.length} 个收藏，保存在本机浏览器存储中。
                 </div>
               </div>
-              <div className="ot-settingrow__control">
+              <div className="shrink-0">
                 <Button
                   size="sm"
                   variant="danger"
@@ -86,14 +90,14 @@ export function SettingsPage() {
               </div>
             </div>
 
-            <div className="ot-settingrow">
-              <div className="ot-settingrow__info">
-                <div className="ot-settingrow__title">最近使用</div>
-                <div className="ot-settingrow__desc">
+            <div className="flex items-center gap-4 border-b border-line py-3">
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-medium">最近使用</div>
+                <div className="text-sm leading-normal text-fg-muted">
                   当前记录 {historyIds.length} 条，用于命令面板的排序。
                 </div>
               </div>
-              <div className="ot-settingrow__control">
+              <div className="shrink-0">
                 <Button
                   size="sm"
                   variant="danger"
@@ -108,14 +112,14 @@ export function SettingsPage() {
               </div>
             </div>
 
-            <div className="ot-settingrow">
-              <div className="ot-settingrow__info">
-                <div className="ot-settingrow__title">重置界面偏好</div>
-                <div className="ot-settingrow__desc">
+            <div className="flex items-center gap-4 py-3 last:pb-0">
+              <div className="min-w-0 flex-1">
+                <div className="text-base font-medium">重置界面偏好</div>
+                <div className="text-sm leading-normal text-fg-muted">
                   恢复侧边栏与分组折叠状态（已折叠分组 {collapsedGroups.length} 个）。
                 </div>
               </div>
-              <div className="ot-settingrow__control">
+              <div className="shrink-0">
                 <Button
                   size="sm"
                   icon={<RotateCcw size={13} />}
@@ -134,14 +138,14 @@ export function SettingsPage() {
         <PanelBox>
           <PanelHead title="快捷键" />
           <PanelBody>
-            <div className="ot-inline">
-              <span className="ot-kbd">Ctrl</span>
-              <span className="ot-kbd">K</span>
-              <span className="ot-muted">打开命令面板，快速跳转到任意工具</span>
+            <div className="flex flex-wrap items-center gap-2">
+              <Kbd>Ctrl</Kbd>
+              <Kbd>K</Kbd>
+              <span className="text-fg-muted">打开命令面板，快速跳转到任意工具</span>
             </div>
-            <div className="ot-inline" style={{ marginTop: "var(--ot-space-3)" }}>
-              <span className="ot-kbd">Esc</span>
-              <span className="ot-muted">关闭命令面板</span>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <Kbd>Esc</Kbd>
+              <span className="text-fg-muted">关闭命令面板</span>
             </div>
           </PanelBody>
         </PanelBox>

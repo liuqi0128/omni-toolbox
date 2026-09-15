@@ -9,9 +9,17 @@ export interface SwitchProps {
 
 export function Switch({ checked, onCheckedChange, label, disabled }: SwitchProps) {
   return (
-    <label className={cn("ot-switch", disabled && "ot-switch--disabled")}>
+    <label
+      className={cn(
+        "inline-flex items-center gap-3",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+      )}
+    >
       <span
-        className={cn("ot-switch__track", checked && "ot-switch__track--on")}
+        className={cn(
+          "relative h-5 w-9 shrink-0 rounded-full transition-colors",
+          checked ? "bg-brand" : "bg-line-strong",
+        )}
         role="switch"
         aria-checked={checked}
         aria-label={label}
@@ -27,7 +35,12 @@ export function Switch({ checked, onCheckedChange, label, disabled }: SwitchProp
           if (!disabled) onCheckedChange(!checked);
         }}
       >
-        <span className="ot-switch__thumb" />
+        <span
+          className={cn(
+            "absolute top-0.5 left-0.5 size-4 rounded-full bg-white shadow-sm transition-transform",
+            checked && "translate-x-4",
+          )}
+        />
       </span>
       {label ? <span>{label}</span> : null}
     </label>
@@ -48,22 +61,28 @@ export function Segmented<T extends string = string>({
   className,
 }: SegmentedProps<T>) {
   return (
-    <div className={cn("ot-segmented", className)} role="tablist">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          role="tab"
-          aria-selected={option.value === value}
-          className={cn(
-            "ot-segmented__item",
-            option.value === value && "ot-segmented__item--active",
-          )}
-          onClick={() => onValueChange(option.value)}
-        >
-          {option.label}
-        </button>
-      ))}
+    <div
+      className={cn("inline-flex gap-0.5 rounded-sm border border-line bg-inset p-0.5", className)}
+      role="tablist"
+    >
+      {options.map((option) => {
+        const active = option.value === value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            className={cn(
+              "h-6 whitespace-nowrap rounded-xs px-3 text-sm transition-colors",
+              active ? "bg-elevated font-medium text-fg shadow-sm" : "text-fg-soft hover:text-fg",
+            )}
+            onClick={() => onValueChange(option.value)}
+          >
+            {option.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   PanelHead,
   Textarea,
 } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import type { ToolModule } from "@/tools/types";
 
 type FlagKey = "g" | "i" | "m" | "s" | "u";
@@ -160,8 +161,12 @@ function RegexTesterTool() {
                   <button
                     key={flag.value}
                     type="button"
-                    className={`ot-segmented__item${active ? " ot-segmented__item--active" : ""}`}
-                    style={{ border: "1px solid var(--ot-border)", height: 28 }}
+                    className={cn(
+                      "h-7 rounded-xs border border-line px-3 text-sm transition-colors",
+                      active
+                        ? "bg-elevated font-medium text-fg shadow-sm"
+                        : "text-fg-soft hover:text-fg",
+                    )}
                     onClick={() =>
                       setFlags((current) =>
                         current.includes(flag.value)
@@ -263,7 +268,7 @@ function RegexTesterTool() {
                           </div>
                         ) : null}
                       </div>
-                      <span className="ot-badge">@{match.index}</span>
+                      <Badge>@{match.index}</Badge>
                     </div>
                   ))}
                 </div>

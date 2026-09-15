@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import {
   Alert,
+  Badge,
   Button,
   CopyButton,
   EmptyState,
@@ -97,7 +98,7 @@ function HashGeneratorTool() {
           </div>
 
           {!isTauriRuntime() ? (
-            <Alert variant="warning" className="ot-alert--warning">
+            <Alert variant="warning">
               <span style={{ display: "block", marginTop: "var(--ot-space-2)" }}>
                 摘要计算由 Rust 后端完成，请通过 <code>pnpm tauri:dev</code> 启动桌面端使用。
               </span>
@@ -135,7 +136,7 @@ function HashGeneratorTool() {
                         marginBottom: 2,
                       }}
                     >
-                      <span className="ot-badge ot-badge--brand">{item.label}</span>
+                      <Badge variant="brand">{item.label}</Badge>
                       <span className="ot-hint">{item.note}</span>
                     </div>
                     <div

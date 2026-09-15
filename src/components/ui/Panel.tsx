@@ -8,7 +8,16 @@ export interface PanelProps {
 }
 
 export function Panel({ className, children }: PanelProps) {
-  return <section className={cn("ot-panel", className)}>{children}</section>;
+  return (
+    <section
+      className={cn(
+        "flex min-h-0 min-w-0 flex-col overflow-hidden rounded-lg border border-line bg-surface",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
 }
 
 export interface PanelHeadProps {
@@ -20,12 +29,17 @@ export interface PanelHeadProps {
 
 export function PanelHead({ title, icon, actions, className }: PanelHeadProps) {
   return (
-    <header className={cn("ot-panel__head", className)}>
-      <span className="ot-panel__title">
+    <header
+      className={cn(
+        "flex h-[42px] shrink-0 items-center gap-3 border-b border-line bg-surface px-4",
+        className,
+      )}
+    >
+      <span className="flex items-center gap-2 text-sm font-semibold tracking-[0.02em] whitespace-nowrap text-fg-soft">
         {icon}
         {title}
       </span>
-      {actions ? <div className="ot-panel__actions">{actions}</div> : null}
+      {actions ? <div className="ml-auto flex items-center gap-1">{actions}</div> : null}
     </header>
   );
 }
@@ -39,7 +53,7 @@ export interface PanelBodyProps {
 
 export function PanelBody({ children, flush = false, className }: PanelBodyProps) {
   return (
-    <div className={cn("ot-panel__body", flush && "ot-panel__body--flush", className)}>
+    <div className={cn("min-h-0 flex-1 overflow-auto", flush ? "p-0" : "p-4", className)}>
       {children}
     </div>
   );

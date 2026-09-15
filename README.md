@@ -6,17 +6,17 @@
 
 ## 技术栈
 
-| 层       | 选型                           |
-| -------- | ------------------------------ |
-| 桌面外壳 | Tauri 2                        |
-| 前端框架 | React 19 + TypeScript          |
-| 构建工具 | Vite 8                         |
-| 路由     | React Router 7（HashRouter）   |
-| 状态管理 | Zustand 5（含持久化）          |
-| 图标     | lucide-react                   |
-| 样式     | 原生 CSS 设计令牌 + BEM 语义类 |
-| 后端     | Rust（Tauri commands）         |
-| 包管理器 | pnpm                           |
+| 层       | 选型                                        |
+| -------- | ------------------------------------------- |
+| 桌面外壳 | Tauri 2                                     |
+| 前端框架 | React 19 + TypeScript                       |
+| 构建工具 | Vite 8                                      |
+| 路由     | React Router 7（HashRouter）                |
+| 状态管理 | Zustand 5（含持久化）                       |
+| 图标     | lucide-react                                |
+| 样式     | Tailwind CSS v4（设计令牌经 `@theme` 映射） |
+| 后端     | Rust（Tauri commands）                      |
+| 包管理器 | pnpm                                        |
 
 ## 环境要求
 
@@ -69,7 +69,7 @@ omni-toolbox/
 │  │  ├─ storage.ts              # 本地持久化
 │  │  └─ cn.ts                   # 类名合并
 │  ├─ pages/                     # 首页 / 设置 / 关于 / 404
-│  ├─ styles/                    # 样式分层：tokens → base → layout → components → tools → overlays → pages
+│  ├─ styles/                    # Tailwind 入口与设计令牌（index / tokens / base / tools）
 │  └─ tools/                     # ★ 工具集合（自动注册）
 │     ├─ types.ts                # ToolMeta / ToolModule 契约
 │     ├─ registry.ts             # import.meta.glob 自动发现与路由生成
@@ -195,7 +195,9 @@ try {
 
 ## 设计约定
 
-- **样式分层**：颜色、间距、圆角等一律使用 `src/styles/tokens.css` 中的 CSS 变量，不在组件中硬编码数值；深色 / 浅色主题通过切换 `html[data-theme]` 生效。
+- **样式**：使用 Tailwind CSS v4 工具类，不新增自定义组件样式。设计令牌是 `src/styles/tokens.css` 里的 `--ot-*` 变量，由 `src/styles/index.css` 的 `@theme inline` 映射成工具类（`bg-surface`、`text-fg-muted`、`border-line`、`rounded-md`…），因此深色 / 浅色主题切换只需改 `html[data-theme]`，工具类和组件都不用动。
+  - `base.css` 必须包在 `@layer base`、`tools.css` 包在 `@layer components`，否则未分层样式会覆盖工具类。
+  - `tools.css` 中仍有各工具页面复用的语义类（`.ot-workspace`、`.ot-code`、`.ot-kv`、`.ot-diff-*` 等），按需逐步迁移。
 - **状态边界**：跨工具共享的状态放 `features/*/store.ts`（Zustand + persist），组件内部的一次性状态用 `useState`。
 - **IPC 边界**：所有原生调用必须经过 `lib/ipc.ts`，便于统一错误处理与后续埋点。
 - **工具自洽**：工具之间不互相引用，公共能力下沉到 `components/ui` 或 `lib`。

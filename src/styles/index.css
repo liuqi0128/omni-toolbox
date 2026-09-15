@@ -1,11 +1,93 @@
 /**
- * 样式入口：按层组织，顺序即为层叠顺序
- * tokens -> base -> layout -> components -> tools -> overlays
+ * 样式入口
+ *
+ * - `tokens.css`：底层设计变量（--ot-*），随主题切换而变化
+ * - `@theme inline`：把变量暴露为 Tailwind 工具类（bg-surface / text-fg-muted / rounded-md …）
+ *   使用 inline 是为了让工具类引用变量而不是复制值，深色 / 浅色切换才能生效
+ * - `base.css`：全局基础样式（@layer base）
+ * - `tools.css`：各工具页面共享的语义类（@layer components）
+ *
+ * 组件与页面的样式一律使用 Tailwind 工具类，写在 tsx 中。
  */
+@import "tailwindcss";
+
 @import "./tokens.css";
 @import "./base.css";
-@import "./layout.css";
-@import "./components.css";
 @import "./tools.css";
-@import "./overlays.css";
-@import "./pages.css";
+
+@theme inline {
+  /* ---------- 字体 ---------- */
+  --font-sans: var(--ot-font-sans);
+  --font-mono: var(--ot-font-mono);
+
+  /* ---------- 字号 ---------- */
+  --text-xs: var(--ot-text-xs);
+  --text-sm: var(--ot-text-sm);
+  --text-base: var(--ot-text-base);
+  --text-md: var(--ot-text-md);
+  --text-lg: var(--ot-text-lg);
+  --text-xl: var(--ot-text-xl);
+  --text-2xl: var(--ot-text-2xl);
+
+  /* ---------- 圆角 ---------- */
+  --radius-xs: var(--ot-radius-xs);
+  --radius-sm: var(--ot-radius-sm);
+  --radius-md: var(--ot-radius-md);
+  --radius-lg: var(--ot-radius-lg);
+  --radius-xl: var(--ot-radius-xl);
+  --radius-full: var(--ot-radius-full);
+
+  /* ---------- 阴影 ---------- */
+  --shadow-sm: var(--ot-shadow-sm);
+  --shadow-md: var(--ot-shadow-md);
+  --shadow-lg: var(--ot-shadow-lg);
+
+  /* ---------- 背景 ---------- */
+  --color-base: var(--ot-bg-base);
+  --color-surface: var(--ot-bg-surface);
+  --color-elevated: var(--ot-bg-elevated);
+  --color-inset: var(--ot-bg-inset);
+  --color-hover: var(--ot-bg-hover);
+  --color-active: var(--ot-bg-active);
+
+  /* ---------- 描边 ---------- */
+  --color-line: var(--ot-border);
+  --color-line-strong: var(--ot-border-strong);
+
+  /* ---------- 文本 ---------- */
+  --color-fg: var(--ot-text-primary);
+  --color-fg-soft: var(--ot-text-secondary);
+  --color-fg-muted: var(--ot-text-muted);
+  --color-fg-inverse: var(--ot-text-inverse);
+
+  /* ---------- 品牌 ---------- */
+  --color-brand: var(--ot-brand);
+  --color-brand-hover: var(--ot-brand-hover);
+  --color-brand-active: var(--ot-brand-active);
+  --color-brand-soft: var(--ot-brand-soft);
+  --color-brand-ring: var(--ot-brand-ring);
+  --color-on-brand: var(--ot-brand-contrast);
+
+  /* ---------- 语义色 ---------- */
+  --color-success: var(--ot-success);
+  --color-success-soft: var(--ot-success-soft);
+  --color-warning: var(--ot-warning);
+  --color-warning-soft: var(--ot-warning-soft);
+  --color-danger: var(--ot-danger);
+  --color-danger-soft: var(--ot-danger-soft);
+  --color-info: var(--ot-info);
+  --color-info-soft: var(--ot-info-soft);
+
+  /* ---------- 滚动条 ---------- */
+  --color-scrollbar: var(--ot-scrollbar);
+  --color-scrollbar-hover: var(--ot-scrollbar-hover);
+
+  /* ---------- 过渡默认值 ---------- */
+  --default-transition-duration: var(--ot-duration);
+  --default-transition-timing-function: var(--ot-ease);
+
+  /* ---------- 动画 ---------- */
+  --animate-toast-in: ot-toast-in var(--ot-duration) var(--ot-ease);
+  --animate-palette-in: ot-palette-in var(--ot-duration) var(--ot-ease);
+  --animate-fade-in: ot-fade-in var(--ot-duration-fast) var(--ot-ease);
+}

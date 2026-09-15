@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 
-import { SearchInput } from "@/components/ui";
+import { Button, SearchInput } from "@/components/ui";
 import { useFavoritesStore } from "@/features/favorites/store";
 import { useSettingsStore } from "@/features/settings/store";
 import { useThemeStore } from "@/features/theme/store";
@@ -26,6 +26,13 @@ const THEME_LABELS: Record<ThemeMode, string> = {
   light: "主题：浅色",
 };
 
+/** 分组标题与导航项共用的排版 */
+const GROUP_LABEL_CLASS =
+  "px-2 py-1 text-sm font-semibold tracking-[0.08em] text-fg-muted uppercase";
+
+const NAV_ITEM_CLASS =
+  "group flex h-[34px] w-full items-center gap-3 rounded-sm px-2 text-left text-md transition-colors";
+
 interface NavItemProps {
   to: string;
   icon: LucideIcon;
@@ -43,16 +50,27 @@ function NavItem({ to, icon: Icon, label, collapsed, toolId }: NavItemProps) {
     <NavLink
       to={to}
       title={collapsed ? label : undefined}
-      className={({ isActive }) => cn("ot-navitem", isActive && "ot-navitem--active")}
+      className={({ isActive }) =>
+        cn(
+          NAV_ITEM_CLASS,
+          collapsed && "justify-center px-0",
+          isActive
+            ? "bg-brand-soft font-medium text-brand"
+            : "text-fg-soft hover:bg-hover hover:text-fg",
+        )
+      }
     >
-      <Icon size={16} className="ot-navitem__icon" aria-hidden />
-      {collapsed ? null : <span className="ot-navitem__text">{label}</span>}
+      <Icon size={16} className="shrink-0" aria-hidden />
+      {collapsed ? null : <span className="min-w-0 flex-1 truncate">{label}</span>}
       {!collapsed && toolId ? (
         <button
           type="button"
           title={starred ? "取消收藏" : "收藏"}
           aria-label={starred ? "取消收藏" : "收藏"}
-          className={cn("ot-navitem__star", starred && "ot-navitem__star--on")}
+          className={cn(
+            "shrink-0 text-warning transition-opacity",
+            starred ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+          )}
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -89,18 +107,25 @@ export function Sidebar() {
   const ThemeIcon = THEME_ICONS[themeMode];
 
   return (
-    <aside className={cn("ot-sidebar", collapsed && "ot-sidebar--collapsed")}>
-      <div className="ot-sidebar__brand">
-        <img src="/logo.svg" alt="" className="ot-sidebar__logo" />
+    <aside
+      className={cn(
+        "flex h-full shrink-0 flex-col border-r border-line bg-surface transition-[width]",
+        collapsed ? "w-[60px]" : "w-[244px]",
+      )}
+    >
+      <div className="flex h-14 shrink-0 items-center gap-3 px-3">
+        <img src="/logo.svg" alt="" className="size-7 shrink-0 rounded-sm" />
         {collapsed ? null : (
-          <div className="ot-sidebar__title">
-            <strong>万象工具箱</strong>
+          <div className="flex min-w-0 flex-col leading-tight">
+            <strong className="text-md font-semibold tracking-[0.02em] whitespace-nowrap">
+              万象工具箱
+            </strong>
           </div>
         )}
       </div>
 
       {collapsed ? null : (
-        <div className="ot-sidebar__search">
+        <div className="shrink-0 px-3 pb-3">
           <SearchInput
             value={query}
             placeholder="搜索工具…"
@@ -109,15 +134,15 @@ export function Sidebar() {
         </div>
       )}
 
-      <nav className="ot-sidebar__nav">
-        <div className="ot-navgroup__items">
+      <nav className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-2 pb-3">
+        <div className="flex flex-col gap-0.5 pt-0.5">
           <NavItem to="/" icon={House} label="首页" collapsed={collapsed} />
         </div>
 
         {searching ? (
-          <div className="ot-navgroup">
-            <div className="ot-navgroup__label">搜索结果</div>
-            <div className="ot-navgroup__items">
+          <div className="pt-3">
+            <div className={GROUP_LABEL_CLASS}>搜索结果</div>
+            <div className="flex flex-col gap-0.5 pt-0.5">
               {searchResults.map((tool) => (
                 <NavItem
                   key={tool.id}
@@ -129,16 +154,16 @@ export function Sidebar() {
                 />
               ))}
               {searchResults.length === 0 ? (
-                <p className="ot-sidebar__empty">没有匹配的工具</p>
+                <p className="px-3 py-6 text-center text-sm text-fg-muted">没有匹配的工具</p>
               ) : null}
             </div>
           </div>
         ) : (
           <>
             {favoriteTools.length > 0 ? (
-              <div className="ot-navgroup">
-                <div className="ot-navgroup__label">收藏</div>
-                <div className="ot-navgroup__items">
+              <div className="pt-3">
+                <div className={GROUP_LABEL_CLASS}>收藏</div>
+                <div className="flex flex-col gap-0.5 pt-0.5">
                   {favoriteTools.map((tool) => (
                     <NavItem
                       key={tool.id}
@@ -158,26 +183,29 @@ export function Sidebar() {
               const expand = collapsed || !isCollapsed;
 
               return (
-                <div className="ot-navgroup" key={group.category}>
+                <div className="pt-3" key={group.category}>
                   {collapsed ? null : (
                     <button
                       type="button"
-                      className="ot-navgroup__label"
+                      className={cn(
+                        GROUP_LABEL_CLASS,
+                        "flex w-full cursor-pointer items-center gap-2 select-none hover:text-fg-soft",
+                      )}
                       aria-expanded={!isCollapsed}
                       onClick={() => toggleGroup(group.category)}
                     >
                       <ChevronRight
                         size={12}
                         className={cn(
-                          "ot-navgroup__chevron",
-                          isCollapsed && "ot-navgroup__chevron--collapsed",
+                          "transition-transform",
+                          isCollapsed ? "rotate-0" : "rotate-90",
                         )}
                       />
                       {group.label}
                     </button>
                   )}
                   {expand ? (
-                    <div className="ot-navgroup__items">
+                    <div className="flex flex-col gap-0.5 pt-0.5">
                       {group.items.map((tool) => (
                         <NavItem
                           key={tool.id}
@@ -197,41 +225,42 @@ export function Sidebar() {
         )}
       </nav>
 
-      <div className="ot-sidebar__footer">
-        <button
-          type="button"
-          className="ot-btn ot-btn--ghost ot-btn--icon"
+      <div
+        className={cn(
+          "flex shrink-0 items-center gap-1 border-t border-line py-2",
+          collapsed ? "justify-center px-0" : "px-3",
+        )}
+      >
+        <Button
+          variant="ghost"
+          iconOnly
+          icon={<PanelLeft size={16} />}
           title={collapsed ? "展开侧边栏" : "折叠侧边栏"}
           aria-label={collapsed ? "展开侧边栏" : "折叠侧边栏"}
           onClick={toggleSidebar}
-        >
-          <PanelLeft size={16} />
-        </button>
+        />
         {/* 折叠态只保留展开按钮，其余入口收起，避免按钮溢出 60px 宽度 */}
         {collapsed ? null : (
           <>
-            <button
-              type="button"
-              className="ot-btn ot-btn--ghost ot-btn--icon"
+            <Button
+              variant="ghost"
+              iconOnly
+              icon={<ThemeIcon size={16} />}
               title={THEME_LABELS[themeMode]}
               aria-label={THEME_LABELS[themeMode]}
               onClick={() => {
-                const next =
-                  THEME_CYCLE[(THEME_CYCLE.indexOf(themeMode) + 1) % THEME_CYCLE.length];
+                const next = THEME_CYCLE[(THEME_CYCLE.indexOf(themeMode) + 1) % THEME_CYCLE.length];
                 setThemeMode(next);
               }}
-            >
-              <ThemeIcon size={16} />
-            </button>
-            <button
-              type="button"
-              className="ot-btn ot-btn--ghost ot-btn--icon"
+            />
+            <Button
+              variant="ghost"
+              iconOnly
+              icon={<Settings size={16} />}
               title="设置"
               aria-label="设置"
               onClick={() => void navigate("/settings")}
-            >
-              <Settings size={16} />
-            </button>
+            />
           </>
         )}
       </div>

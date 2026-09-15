@@ -2,7 +2,7 @@ import { Search, Sparkles, Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { EmptyState, SearchInput } from "@/components/ui";
+import { Badge, EmptyState, Kbd, SearchInput } from "@/components/ui";
 import { APP_NAME } from "@/config/app";
 import { useFavoritesStore } from "@/features/favorites/store";
 import { toolGroups, visibleTools } from "@/tools/registry";
@@ -16,13 +16,19 @@ interface ToolCardProps {
 function ToolCard({ tool, onOpen }: ToolCardProps) {
   const Icon = tool.icon;
   return (
-    <button type="button" className="ot-toolcard" onClick={() => onOpen(tool.id)}>
-      <span className="ot-toolcard__icon">
+    <button
+      type="button"
+      className="flex items-start gap-3 rounded-lg border border-line bg-surface p-4 text-left transition-[border-color,background-color,transform] hover:-translate-y-px hover:border-brand hover:bg-elevated"
+      onClick={() => onOpen(tool.id)}
+    >
+      <span className="flex size-[34px] shrink-0 items-center justify-center rounded-md bg-brand-soft text-brand">
         <Icon size={17} aria-hidden />
       </span>
-      <span className="ot-toolcard__body">
-        <span className="ot-toolcard__name">{tool.name}</span>
-        <span className="ot-toolcard__desc">{tool.description}</span>
+      <span className="flex min-w-0 flex-col gap-0.5">
+        <span className="text-md font-semibold text-fg">{tool.name}</span>
+        <span className="line-clamp-2 text-sm leading-normal text-fg-muted">
+          {tool.description}
+        </span>
       </span>
     </button>
   );
@@ -58,15 +64,15 @@ export function HomePage() {
   );
 
   return (
-    <div className="ot-home">
-      <section className="ot-hero">
-        <h1 className="ot-hero__title">{APP_NAME}</h1>
-        <p className="ot-hero__desc">
+    <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto pb-2 [scrollbar-gutter:stable] [&>*]:shrink-0">
+      <section className="relative overflow-hidden rounded-xl border border-line bg-surface bg-[image:radial-gradient(120%_140%_at_0%_0%,var(--ot-brand-soft),transparent_60%)] p-6">
+        <h1 className="text-2xl font-bold tracking-[-0.01em]">{APP_NAME}</h1>
+        <p className="mt-1 max-w-[560px] text-md text-fg-soft">
           把日常用得到的小工具收进同一个窗口。新增工具只需在 <code>src/tools/</code>{" "}
           下建立目录，导航与路由会自动生成。
         </p>
 
-        <div className="ot-hero__search">
+        <div className="mt-5 max-w-[420px]">
           <SearchInput
             value={query}
             placeholder="搜索工具名称、功能或关键词…"
@@ -74,27 +80,29 @@ export function HomePage() {
           />
         </div>
 
-        <div className="ot-hero__meta">
-          <span className="ot-badge ot-badge--brand">
+        <div className="mt-4 flex items-center gap-2">
+          <Badge variant="brand">
             <Sparkles size={12} />
             {visibleTools.length} 个工具
-          </span>
-          <span className="ot-badge">
-            <span className="ot-kbd">Ctrl</span>
-            <span className="ot-kbd">K</span>
+          </Badge>
+          <Badge>
+            <Kbd>Ctrl</Kbd>
+            <Kbd>K</Kbd>
             快速跳转
-          </span>
+          </Badge>
         </div>
       </section>
 
       {!keyword && favoriteTools.length > 0 ? (
-        <section className="ot-section">
-          <div className="ot-section__head">
-            <Star size={13} className="ot-muted" />
-            <span className="ot-section__title">我的收藏</span>
-            <span className="ot-section__count">{favoriteTools.length}</span>
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Star size={13} className="text-fg-muted" />
+            <span className="text-sm font-semibold tracking-[0.06em] text-fg-muted uppercase">
+              我的收藏
+            </span>
+            <span className="text-xs text-fg-muted">{favoriteTools.length}</span>
           </div>
-          <div className="ot-grid">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(248px,1fr))] gap-3">
             {favoriteTools.map((tool) => (
               <ToolCard key={tool.id} tool={tool} onOpen={open} />
             ))}
@@ -103,12 +111,14 @@ export function HomePage() {
       ) : null}
 
       {groups.map((group) => (
-        <section className="ot-section" key={group.category}>
-          <div className="ot-section__head">
-            <span className="ot-section__title">{group.label}</span>
-            <span className="ot-section__count">{group.items.length}</span>
+        <section className="flex flex-col gap-3" key={group.category}>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold tracking-[0.06em] text-fg-muted uppercase">
+              {group.label}
+            </span>
+            <span className="text-xs text-fg-muted">{group.items.length}</span>
           </div>
-          <div className="ot-grid">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(248px,1fr))] gap-3">
             {group.items.map((tool) => (
               <ToolCard key={tool.id} tool={tool} onOpen={open} />
             ))}

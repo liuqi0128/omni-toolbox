@@ -57,7 +57,9 @@
 - **工具注册**：`src/tools/registry.ts` 通过 `import.meta.glob("./*/index.tsx")` 自动发现工具。注意 `import.meta.glob` 返回的是模块命名空间对象，工具数据位于 `default` 上。
 - **新增工具**：在 `src/tools/<id>/index.tsx` 中**默认导出** `{ meta, component }`（`satisfies ToolModule`），无需修改任何注册文件。
 - **后端命令**：写在 `src-tauri/src/commands/` 对应领域模块中，在 `src-tauri/src/lib.rs` 的 `generate_handler!` 登记，统一返回 `AppResult<T>`。
-- **样式**：颜色、间距、圆角一律使用 `src/styles/tokens.css` 中的 CSS 变量，不硬编码数值。样式分层为 tokens → base → layout → components → tools → overlays → pages。
+- **样式**：一律使用 **Tailwind CSS v4 工具类**写在组件里，不要新增自定义 CSS 文件或组件样式。设计令牌定义在 `src/styles/tokens.css`（`--ot-*` 变量），经 `src/styles/index.css` 的 `@theme inline` 映射为工具类：`bg-surface`、`bg-elevated`、`bg-inset`、`text-fg`、`text-fg-soft`、`text-fg-muted`、`border-line`、`bg-brand`、`text-on-brand`、`rounded-sm`、`shadow-md`、`text-md` 等。
+- **样式分层的坑**：`base.css` 必须包在 `@layer base`、`tools.css` 包在 `@layer components`。未分层的样式优先级**高于** Tailwind 的所有层，`* { margin: 0 }` 或 `button { border: none }` 若散在外面会静默覆盖工具类。
+- **尚未迁移的部分**：`tools.css` 中的 `.ot-workspace`、`.ot-stack`、`.ot-code`、`.ot-kv`、`.ot-list`、`.ot-option`、`.ot-diff-*`、`.ot-serial-*` 等仍是传统 CSS，供各工具页面复用；新增工具可继续用，也可直接用 Tailwind 工具类。
 - **IPC**：前端所有原生调用必须经过 `@/lib/ipc` 的 `call()`，不要直接使用 `invoke`。
 - **主题**：切换 `html[data-theme]`，深色为默认值。
 

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Badge, Kbd } from "@/components/ui";
 import { useHistoryStore } from "@/features/history/store";
 import { cn } from "@/lib/cn";
 import { getTool, searchTools, visibleTools } from "@/tools/registry";
@@ -69,13 +70,19 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="ot-modal-mask" onMouseDown={onClose}>
-      <div className="ot-palette" onMouseDown={(event) => event.stopPropagation()}>
-        <div className="ot-palette__head">
+    <div
+      className="fixed inset-0 z-[200] flex animate-fade-in items-start justify-center bg-black/50 pt-[12vh] backdrop-blur-[2px]"
+      onMouseDown={onClose}
+    >
+      <div
+        className="flex max-h-[60vh] w-[min(620px,calc(100vw-80px))] animate-palette-in flex-col overflow-hidden rounded-lg border border-line-strong bg-elevated shadow-lg"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="flex h-12 shrink-0 items-center gap-3 border-b border-line px-4 text-fg-muted">
           <Search size={16} aria-hidden />
           <input
             ref={inputRef}
-            className="ot-palette__input"
+            className="h-full flex-1 text-md text-fg outline-none placeholder:text-fg-muted"
             value={query}
             placeholder="搜索工具或功能…"
             onChange={(event) => {
@@ -86,8 +93,8 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
           />
         </div>
 
-        <div className="ot-palette__list" ref={listRef}>
-          <div className="ot-palette__group">
+        <div className="min-h-0 flex-1 overflow-y-auto p-2" ref={listRef}>
+          <div className="px-3 pt-2 pb-1 text-xs font-semibold tracking-[0.08em] text-fg-muted uppercase">
             {query.trim() ? `${results.length} 个结果` : "最近使用与全部工具"}
           </div>
 
@@ -99,36 +106,36 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
                 type="button"
                 data-index={index}
                 className={cn(
-                  "ot-palette__item",
-                  index === activeIndex && "ot-palette__item--active",
+                  "flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left text-base transition-colors",
+                  index === activeIndex ? "bg-brand-soft text-brand" : "text-fg-soft",
                 )}
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => select(tool.id)}
               >
                 <Icon size={15} aria-hidden />
-                <span className="ot-palette__item-text">{tool.name}</span>
-                <span className="ot-badge">{tool.description}</span>
+                <span className="min-w-0 flex-1 truncate">{tool.name}</span>
+                <Badge>{tool.description}</Badge>
               </button>
             );
           })}
 
           {results.length === 0 ? (
-            <div className="ot-sidebar__empty">没有找到匹配的工具</div>
+            <div className="px-3 py-6 text-center text-sm text-fg-muted">没有找到匹配的工具</div>
           ) : null}
         </div>
 
-        <div className="ot-palette__footer">
-          <span>
-            <span className="ot-kbd">↑</span>
-            <span className="ot-kbd">↓</span>
+        <div className="flex shrink-0 items-center gap-4 border-t border-line px-4 py-2 text-xs text-fg-muted">
+          <span className="inline-flex items-center gap-1">
+            <Kbd>↑</Kbd>
+            <Kbd>↓</Kbd>
             选择
           </span>
-          <span>
-            <span className="ot-kbd">Enter</span>
+          <span className="inline-flex items-center gap-1">
+            <Kbd>Enter</Kbd>
             打开
           </span>
-          <span>
-            <span className="ot-kbd">Esc</span>
+          <span className="inline-flex items-center gap-1">
+            <Kbd>Esc</Kbd>
             关闭
           </span>
         </div>

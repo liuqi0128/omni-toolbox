@@ -91,20 +91,20 @@ function Base64Tool() {
         <PanelBody>
           <div className="ot-inline" style={{ marginBottom: "var(--ot-space-3)" }}>
             <Segmented value={mode} options={MODE_OPTIONS} onValueChange={setMode} />
-            <button
-              type="button"
-              className="ot-btn ot-btn--ghost ot-btn--sm"
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={result.state !== "ok"}
               onClick={() => {
                 if (result.state === "ok") {
                   setInput(output);
                   setMode(mode === "encode" ? "decode" : "encode");
                 }
               }}
-              disabled={result.state !== "ok"}
             >
               <ArrowRightLeft size={13} />
               结果转输入
-            </button>
+            </Button>
           </div>
 
           <Textarea

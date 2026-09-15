@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 
 import {
   Alert,
+  Badge,
   Button,
   CopyButton,
   EmptyState,
@@ -129,7 +130,7 @@ function UrlCodecTool() {
         <PanelHead
           title="查询参数解析"
           icon={<ListFilter size={14} />}
-          actions={<span className="ot-badge">{params.length} 项</span>}
+          actions={<Badge>{params.length} 项</Badge>}
         />
         <PanelBody flush>
           {params.length > 0 ? (
