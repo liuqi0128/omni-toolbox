@@ -15,10 +15,45 @@ import {
   Textarea,
 } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { toMessage } from "@/lib/ipc";
 import type { ToolModule } from "@/tools/types";
 
-import { diffLines, DIFF_LIMIT_CELLS, splitLines, summarize, toSideBySide } from "./diff";
+import {
+  diffLines,
+  DIFF_LIMIT_CELLS,
+  DIFF_LIMIT_CHARS,
+  splitLines,
+  summarize,
+  toSideBySide,
+} from "./diff";
 import type { DiffOptions } from "./diff";
+
+/** 单个文件的读取上限，超过直接拒绝，避免读取与渲染把界面卡死 */
+const MAX_FILE_BYTES = 2 * 1024 * 1024;
+
+function formatSize(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  if (bytes >= 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${bytes} B`;
+}
+
+/**
+ * 采样前 8KB 判断是否为二进制文件：
+ * 出现 NUL 字节，或控制字符占比超过 10%，即认为不是文本。
+ */
+function looksBinary(bytes: Uint8Array): boolean {
+  const sample = bytes.subarray(0, 8192);
+  if (sample.length === 0) return false;
+
+  let control = 0;
+  for (const byte of sample) {
+    if (byte === 0) return true;
+    // 放行 \t \n \v \f \r
+    if (byte < 9 || (byte > 13 && byte < 32)) control += 1;
+  }
+
+  return control / sample.length > 0.1;
+}
 
 interface FileInputPanelProps {
   title: string;
@@ -119,6 +154,8 @@ function FileDiffTool() {
   const [ignoreCase, setIgnoreCase] = useState(false);
   const [ignoreWhitespace, setIgnoreWhitespace] = useState(false);
   const [onlyDiff, setOnlyDiff] = useState(false);
+  /** 与 diff 结果无关的输入提示，例如选择了二进制文件 */
+  const [notice, setNotice] = useState<string | null>(null);
 
   const result = useMemo(() => {
     if (!left && !right) return { state: "empty" as const };
@@ -130,9 +167,11 @@ function FileDiffTool() {
 
     const leftCount = splitLines(left).length;
     const rightCount = splitLines(right).length;
+    const chars = left.length + right.length;
 
-    if (leftCount * rightCount > DIFF_LIMIT_CELLS) {
-      return { state: "too-large" as const, leftCount, rightCount };
+    // 行数拦不住「行少但每行极长」的输入（二进制解码后的典型形态），故再按字符数兜一道
+    if (leftCount * rightCount > DIFF_LIMIT_CELLS || chars > DIFF_LIMIT_CHARS) {
+      return { state: "too-large" as const, leftCount, rightCount, chars };
     }
 
     const lines = diffLines(left, right, options);
@@ -158,10 +197,29 @@ function FileDiffTool() {
   }, [result, onlyDiff]);
 
   const readFile = async (file: File, apply: (text: string, name: string) => void) => {
+    if (file.size > MAX_FILE_BYTES) {
+      setNotice(
+        `「${file.name}」大小 ${formatSize(file.size)}，超过 ${formatSize(MAX_FILE_BYTES)} 的读取上限。`,
+      );
+      return;
+    }
+
     try {
-      apply(await file.text(), file.name);
-    } catch {
-      apply("", file.name);
+      const bytes = new Uint8Array(await file.arrayBuffer());
+
+      // 二进制内容按文本解码后会变成「行极少、每行极长」，会让对比计算长时间阻塞界面
+      if (looksBinary(bytes)) {
+        setNotice(
+          `「${file.name}」看起来是二进制文件（图片、压缩包等），本工具只能对比文本内容。` +
+            `若要比对两个二进制文件是否一致，请改用「哈希摘要」工具。`,
+        );
+        return;
+      }
+
+      setNotice(null);
+      apply(new TextDecoder().decode(bytes), file.name);
+    } catch (cause) {
+      setNotice(`读取「${file.name}」失败：${toMessage(cause)}`);
     }
   };
 
@@ -169,7 +227,13 @@ function FileDiffTool() {
 
   let body: ReactNode;
 
-  if (result.state === "empty") {
+  if (notice) {
+    body = (
+      <div className="ot-diff-message">
+        <Alert variant="warning">{notice}</Alert>
+      </div>
+    );
+  } else if (result.state === "empty") {
     body = (
       <div className="ot-diff-message">
         <EmptyState
@@ -183,8 +247,9 @@ function FileDiffTool() {
     body = (
       <div className="ot-diff-message">
         <Alert variant="warning">
-          内容过大（左侧 {result.leftCount} 行 × 右侧 {result.rightCount}{" "}
-          行），逐行对比会占用过多内存。 请先裁剪到 2000 行以内再试。
+          内容过大（左侧 {result.leftCount} 行 × 右侧 {result.rightCount} 行，共{" "}
+          {formatSize(result.chars)}），逐行对比会占用过多内存或长时间阻塞界面。 请先裁剪到 2000 行
+          / 1 MB 以内再试。
         </Alert>
       </div>
     );

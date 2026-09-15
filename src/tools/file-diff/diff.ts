@@ -33,6 +33,13 @@ export interface DiffStats {
  */
 export const DIFF_LIMIT_CELLS = 4_000_000;
 
+/**
+ * 两侧文本的字符总量上限（含两端）。
+ * 行数检查拦不住「行很少但每行极长」的输入 —— 二进制文件被按文本解码后
+ * 正是这种形态，所以必须再按字符数兜一道。
+ */
+export const DIFF_LIMIT_CHARS = 1_000_000;
+
 /** 统一换行符并切分为行数组；结尾的换行不算作额外一行 */
 export function splitLines(text: string): string[] {
   if (text === "") return [];
@@ -49,11 +56,41 @@ function normalize(line: string, options: DiffOptions): string {
   return value;
 }
 
+/**
+ * 把各行归一化后映射为整数 ID。
+ * DP 中只比较数字，避免对超长行做逐字符比较（那是二进制内容卡死的主因）。
+ *
+ * 注意：两侧必须共用同一个 dictionary，否则同一 ID 在左右两侧会指向不同的行，
+ * 导致截然不同的内容被判为相同。
+ */
+function internKeys(
+  lines: string[],
+  options: DiffOptions,
+  dictionary: Map<string, number>,
+): Uint32Array {
+  const keys = new Uint32Array(lines.length);
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const normalized = normalize(lines[index], options);
+    let id = dictionary.get(normalized);
+
+    if (id === undefined) {
+      id = dictionary.size;
+      dictionary.set(normalized, id);
+    }
+
+    keys[index] = id;
+  }
+
+  return keys;
+}
+
 export function diffLines(left: string, right: string, options: DiffOptions): DiffLine[] {
   const leftLines = splitLines(left);
   const rightLines = splitLines(right);
-  const leftKeys = leftLines.map((line) => normalize(line, options));
-  const rightKeys = rightLines.map((line) => normalize(line, options));
+  const dictionary = new Map<string, number>();
+  const leftKeys = internKeys(leftLines, options, dictionary);
+  const rightKeys = internKeys(rightLines, options, dictionary);
 
   const rows = leftLines.length;
   const columns = rightLines.length;
