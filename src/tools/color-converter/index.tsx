@@ -13,6 +13,9 @@ interface Rgb {
 const clamp = (value: number, min = 0, max = 255) => Math.min(max, Math.max(min, value));
 const toHex = (value: number) => clamp(Math.round(value)).toString(16).padStart(2, "0");
 
+/** 输入无法解析时，取色器使用的回退颜色 */
+const DEFAULT_PICKER_COLOR = "#6d5efc";
+
 function hslToRgb(h: number, s: number, l: number): Rgb {
   const saturation = s / 100;
   const lightness = l / 100;
@@ -113,6 +116,13 @@ function ColorConverterTool() {
 
   const parsed = useMemo(() => parseColor(input), [input]);
 
+  /** 原生色板控件只接受 #rrggbb */
+  const pickerValue = useMemo(
+    () =>
+      parsed ? `#${toHex(parsed.r)}${toHex(parsed.g)}${toHex(parsed.b)}` : DEFAULT_PICKER_COLOR,
+    [parsed],
+  );
+
   const palette = useMemo(() => {
     if (!parsed) return [];
     const { h, s, l } = rgbToHsl(parsed);
@@ -168,19 +178,18 @@ function ColorConverterTool() {
               style={{ minHeight: 80 }}
               onChange={(event) => setInput(event.target.value)}
             />
-            {parsed ? (
-              <div
-                style={{
-                  marginTop: "var(--ot-space-3)",
-                  height: 88,
-                  borderRadius: "var(--ot-radius-md)",
-                  border: "1px solid var(--ot-border)",
-                  background: `rgb(${parsed.r}, ${parsed.g}, ${parsed.b})`,
-                }}
-              />
-            ) : null}
+            {/* 原生取色器：点击即打开系统调色板，兼顾预览与自选 */}
+            <input
+              type="color"
+              value={pickerValue}
+              aria-label="自选颜色"
+              title="点击色块打开系统取色器"
+              onChange={(event) => setInput(event.target.value.toUpperCase())}
+              className="mt-3 h-[88px] w-full cursor-pointer appearance-none rounded-md border border-line bg-transparent p-0 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-[9px] [&::-webkit-color-swatch]:border-none"
+            />
+            <p className="ot-hint mt-2">点击色块打开系统取色器，也可直接编辑上方文本</p>
             {!parsed && input.trim() ? (
-              <Alert variant="error" className="ot-alert--error">
+              <Alert variant="error">
                 <span style={{ display: "block", marginTop: "var(--ot-space-3)" }}>
                   无法识别的颜色格式，请使用 hex、rgb() 或 hsl()。
                 </span>
