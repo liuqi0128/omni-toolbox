@@ -7,4 +7,5 @@
 
 pub mod crypto;
 pub mod generator;
+pub mod serial;
 pub mod system;

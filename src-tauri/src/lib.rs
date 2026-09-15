@@ -12,14 +12,22 @@ mod state;
 pub use error::{AppError, AppResult};
 pub use state::AppState;
 
+use commands::serial::SerialState;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(AppState::new())
+        .manage(SerialState::new())
         .invoke_handler(tauri::generate_handler![
             commands::crypto::hash_text,
             commands::generator::generate_uuids,
+            commands::serial::close_serial,
+            commands::serial::list_serial_ports,
+            commands::serial::open_serial,
+            commands::serial::serial_is_open,
+            commands::serial::write_serial,
             commands::system::system_info,
         ])
         .run(tauri::generate_context!())
