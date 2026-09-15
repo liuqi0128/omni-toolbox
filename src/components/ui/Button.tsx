@@ -17,7 +17,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const BASE =
-  "inline-flex items-center justify-center gap-2 h-8 px-3 rounded-sm border border-transparent text-base font-medium whitespace-nowrap text-fg transition-[color,background-color,border-color,opacity] active:enabled:translate-y-[0.5px] disabled:cursor-not-allowed disabled:opacity-[0.45]";
+  "inline-flex items-center justify-center gap-2 rounded-sm border border-transparent font-medium whitespace-nowrap text-fg transition-[color,background-color,border-color,opacity] [&>svg]:pointer-events-none [&>svg]:shrink-0 active:enabled:translate-y-[0.5px] disabled:cursor-not-allowed disabled:opacity-[0.45]";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
@@ -27,10 +27,15 @@ const VARIANTS: Record<ButtonVariant, string> = {
   danger: "bg-transparent border-transparent text-danger hover:enabled:bg-danger-soft",
 };
 
-const SIZES: Record<ButtonSize, string> = {
-  sm: "h-[26px] px-2 text-sm",
-  md: "",
-};
+/**
+ * 尺寸与内边距必须互斥地生成。
+ * 若同时输出 `px-3` 与 `p-0`，两者都是工具类、生成顺序不确定，
+ * 一旦 `px-3` 生效，`w-8` 的按钮内容区只剩 8px，图标会被 flex 压缩。
+ */
+function sizeClass(size: ButtonSize, iconOnly: boolean): string {
+  if (iconOnly) return size === "sm" ? "size-[26px] p-0" : "size-8 p-0";
+  return size === "sm" ? "h-[26px] px-2 text-sm" : "h-8 px-3 text-base";
+}
 
 export function Button({
   variant = "secondary",
@@ -49,8 +54,7 @@ export function Button({
       className={cn(
         BASE,
         VARIANTS[variant],
-        SIZES[size],
-        iconOnly && (size === "sm" ? "w-[26px] p-0" : "w-8 p-0"),
+        sizeClass(size, iconOnly),
         block && "w-full",
         className,
       )}

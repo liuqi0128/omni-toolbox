@@ -30,8 +30,9 @@ const THEME_LABELS: Record<ThemeMode, string> = {
 const GROUP_LABEL_CLASS =
   "px-2 py-1 text-sm font-semibold tracking-[0.08em] text-fg-muted uppercase";
 
+/** 不含左右内边距：折叠态需要换成 px-0，同属性工具类不能同时输出 */
 const NAV_ITEM_CLASS =
-  "group flex h-[34px] w-full items-center gap-3 rounded-sm px-2 text-left text-md transition-colors";
+  "group flex h-[34px] w-full items-center gap-3 rounded-sm text-left text-md transition-colors";
 
 interface NavItemProps {
   to: string;
@@ -53,7 +54,7 @@ function NavItem({ to, icon: Icon, label, collapsed, toolId }: NavItemProps) {
       className={({ isActive }) =>
         cn(
           NAV_ITEM_CLASS,
-          collapsed && "justify-center px-0",
+          collapsed ? "justify-center px-0" : "px-2",
           isActive
             ? "bg-brand-soft font-medium text-brand"
             : "text-fg-soft hover:bg-hover hover:text-fg",

@@ -92,6 +92,11 @@
     max-width: 100%;
   }
 
+  /* lucide 图标保持自身尺寸，不被 flex 压缩 */
+  svg.lucide {
+    flex-shrink: 0;
+  }
+
   :focus-visible {
     outline: 2px solid var(--ot-brand);
     outline-offset: 2px;

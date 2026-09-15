@@ -452,7 +452,7 @@ function SerialTool() {
           <div className="ot-serial-send">
             <Textarea
               mono
-              className="ot-serial-input"
+              className="min-h-16 flex-1"
               value={input}
               placeholder={
                 sendMode === "hex"

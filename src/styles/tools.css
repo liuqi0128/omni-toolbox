@@ -486,11 +486,6 @@
     gap: var(--ot-space-3);
   }
 
-  .ot-serial-input {
-    flex: 1;
-    min-height: 64px;
-  }
-
   .ot-serial-preview {
     margin-top: var(--ot-space-2);
   }
